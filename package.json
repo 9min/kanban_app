@@ -1,8 +1,8 @@
 {
-  "name": "react-app-boilerplate",
-  "version": "0.1.4",
-  "description": "React application boilerplate",
-  "author": "Cássio Zen",
+  "name": "KanbanApp",
+  "version": "0.0.1",
+  "description": "Pro React Book Example App",
+  "author": "9min",
   "license": "ISC",
   "scripts": {
     "start": "webpack-dev-server --progress",
@@ -17,6 +17,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "marked": "^0.3.6",
     "react": "^15.2.1",
     "react-dom": "^15.2.1"
   }
