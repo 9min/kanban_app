@@ -166,13 +166,59 @@ class KanbanBoardContainer extends Component {
         });
     }
 
+    updateCardStatus(cardId, listId) {
+        // 카드의 인덱스를 찾는다.
+        let cardIndex = this.state.cards.findIndex((card)=>card.id == cardId);
+        // 현재 카드를 얻는다.
+        let card = this.state.cards[cardIndex];
+        // 다른 리스트 위로 드래그할 때만 진행한다.
+        if(card.status !== listId) {
+            // 변경된 객체로 컴포넌트 상태를 설정한다.
+            this.setState(update(this.state, {
+                cards: {
+                    [cardIndex]: {
+                        status: { $set: listId }
+                    }
+                }
+            }));
+        }
+    }
+
+    updateCardPosition(cardId, afterId) {
+        // 다른 카드 위로 드래그할 때만 진행한다.
+        if(cardId !== afterId) {
+            // 카드의 인덱스를 찾는다.
+            let cardIndex = this.state.cards.findIndex((card)=>card.id == cardId);
+            // 현재 카드를 얻는다.
+            let card = this.state.cards[cardIndex];
+            // 마우스로 가리키는 카드의 인덱스를 찾는다.
+            let afterIndex = this.state.cards.findIndex((card)=>card.id == afterId);
+            // splice를 이용해 카드를 제거한 후 새로운 인덱스 위치로 삽입한다.
+            this.setState(update(this.state, {
+                cards: {
+                    $splice: [
+                        [cardIndex, 1],
+                        [afterIndex, 0, card]
+                    ]
+                }
+            }));
+        }
+    }
+
     render() {
-        return <KanbanBoard cards={this.state.cards}
-                    taskCallbacks={{
-                        add: this.addTask.bind(this),
-                        delete: this.deleteTask.bind(this),
-                        toggle: this.toggleTask.bind(this)
-                    }} />
+        return (
+            <KanbanBoard cards={this.state.cards}
+                taskCallbacks={{
+                    add: this.addTask.bind(this),
+                    delete: this.deleteTask.bind(this),
+                    toggle: this.toggleTask.bind(this)
+                }}
+                cardCallbacks={{
+                    updateStatus: this.updateCardStatus.bind(this),
+                    updatePosition: this.updateCardPosition.bind(this)
+                }}
+            />
+        )
     }
 }
 
